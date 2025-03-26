@@ -54,10 +54,11 @@ void AMainBoard::Tick(float DeltaTime)
     {
         MoveDown();
         FallTimer = 0.0f;
+        UpdateVisualBlocks();
     }
 
 
-    UpdateVisualBlocks();
+    
 }
 
 // Called to bind functionality to input

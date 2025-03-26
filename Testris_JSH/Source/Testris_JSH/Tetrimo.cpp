@@ -16,7 +16,7 @@ ATetrimo::ATetrimo()
     if (CubeMesh.Succeeded())
     {
         MeshComponent->SetStaticMesh(CubeMesh.Object);
-        MeshComponent->SetWorldScale3D(FVector(0.9f)); // 약간 작게 해서 간격 보이게
+        MeshComponent->SetWorldScale3D(FVector(0.5f));
     }
 }
 

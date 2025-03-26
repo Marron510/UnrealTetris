@@ -13,7 +13,7 @@ ATetrisController::ATetrisController()
 void ATetrisController::BeginPlay()
 {
     Super::BeginPlay();
-    Board = GetWorld()->SpawnActor<AMainBoard>();
+    Board = Cast<AMainBoard>(GetPawn());
 }
 
 void ATetrisController::SetupInputComponent()
