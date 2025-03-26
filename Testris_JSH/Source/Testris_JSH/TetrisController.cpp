@@ -30,22 +30,26 @@ void ATetrisController::OnMoveLeft()
 {
     if (Board)
         Board->MoveLeft();
+    Board->UpdateVisualBlocks();
 }
 
 void ATetrisController::OnMoveRight()
 {
     if (Board) 
         Board->MoveRight(); 
+    Board->UpdateVisualBlocks();
 }
 
 void ATetrisController::OnMoveDown() 
 {
     if (Board) 
         Board->MoveDown();
+    Board->UpdateVisualBlocks();
 }
 
 void ATetrisController::OnRotate()
 { 
     if (Board)
         Board->Rotate(); 
+    Board->UpdateVisualBlocks();
 }

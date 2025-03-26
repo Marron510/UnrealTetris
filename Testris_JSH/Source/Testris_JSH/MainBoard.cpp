@@ -19,7 +19,7 @@ AMainBoard::AMainBoard()
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(CameraBoom);
     FollowCamera->bUsePawnControlRotation = false;
-    FollowCamera->SetRelativeLocation(FVector{ WorldLocationX, Width * -0.5f * CellSize , Height * 0.5f * CellSize });
+    FollowCamera->SetRelativeLocation(FVector{ WorldLocationX, Width * -0.5f * CellSize , Height * 0.7f * CellSize });
 
 
 }
@@ -56,9 +56,6 @@ void AMainBoard::Tick(float DeltaTime)
         FallTimer = 0.0f;
         UpdateVisualBlocks();
     }
-
-
-    
 }
 
 // Called to bind functionality to input
@@ -95,7 +92,9 @@ void AMainBoard::LockShape()
             Grid[P.X][P.Y] = true;
     }
 
+    ClearFullLines();
     SpawnNewShape();
+    UpdateVisualBlocks();
 }
 
 void AMainBoard::MoveLeft()
@@ -128,32 +127,7 @@ void AMainBoard::Rotate()
         CurrentShape.Rotate();
 }
 
-void AMainBoard::DrawDebug()
-{
-    FVector Origin = GetActorLocation();
-    float Size = 50.0f;
 
-    // Draw locked grid
-    for (int x = 0; x < Width; x++)
-    {
-        for (int y = 0; y < Height; y++)
-        {
-            if (Grid[x][y])
-            {
-                FVector Pos = Origin + FVector(0, x * Size, y * Size);
-                DrawDebugBox(GetWorld(), Pos, FVector(20), FColor::Red);
-            }
-        }
-    }
-
-    // Draw current shape
-    for (auto P : CurrentShape.GetBlocks())
-    {
-        FIntPoint Point = CurrentPosition + P;
-        FVector Pos = Origin + FVector(0, Point.X * Size, Point.Y * Size);
-        DrawDebugBox(GetWorld(), Pos, FVector(20), FColor::Green);
-    }
-}
 
 void AMainBoard::SpawnWall()
 {
@@ -215,16 +189,81 @@ void AMainBoard::UpdateVisualBlocks()
         }
     }
 
+    
+
     // 현재 움직이는 블록 생성
     for (auto Offset : CurrentShape.GetBlocks())
     {
         FIntPoint Point = CurrentPosition + Offset;
         FVector Pos = Origin + FVector(0, Point.X * Size, Point.Y * Size);
         FActorSpawnParameters Params;
+        UMaterialInterface* ShapeMat = GetMaterialForShape(CurrentShape.GetType());
         AActor* Block = GetWorld()->SpawnActor<AActor>(BlockClass, Pos, FRotator::ZeroRotator, Params);
+
         if (Block)
         {
             ActiveBlocks.Add(Block);
         }
+    }
+}
+
+
+void AMainBoard::ClearFullLines()
+{
+    int LinesCleared = 0;
+
+    for (int y = 0; y < Height; ++y)
+    {
+        bool bIsFullLine = true;
+        for (int x = 0; x < Width; ++x)
+        {
+            if (!Grid[x][y])
+            {
+                bIsFullLine = false;
+                break;
+            }
+        }
+
+        if (bIsFullLine)
+        {
+            for (int y2 = y; y2 < Height - 1; ++y2)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    Grid[x][y2] = Grid[x][y2 + 1];
+                }
+            }
+
+            for (int x = 0; x < Width; ++x)
+            {
+                Grid[x][Height - 1] = false;
+            }
+
+            --y;
+            ++LinesCleared;
+        }
+    }
+
+    if (LinesCleared > 0)
+    {
+        // 시각적으로도 갱신
+        UpdateVisualBlocks();
+
+        // 점수 계산 등도 여기에 추가 가능
+    }
+}
+
+UMaterialInterface* AMainBoard::GetMaterialForShape(EShapeType Type)
+{
+    switch (Type)
+    {
+    case EShapeType::I: return Material_I;
+    case EShapeType::O: return Material_O;
+    case EShapeType::T: return Material_T;
+    case EShapeType::S: return Material_S;
+    case EShapeType::Z: return Material_Z;
+    case EShapeType::L: return Material_L;
+    case EShapeType::J: return Material_J;
+    default: return nullptr;
     }
 }

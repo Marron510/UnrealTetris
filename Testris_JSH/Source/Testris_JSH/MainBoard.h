@@ -38,9 +38,11 @@ public:
 	bool CanMove(const FIntPoint& NewPosition, const TArray<FIntPoint>& Blocks) const;
 	void LockShape();
 	void SpawnNewShape();
-	void DrawDebug();
 	void SpawnWall();
 	void SpawnWallBlockAt(FIntPoint GridPos);
+	void UpdateVisualBlocks();
+	void ClearFullLines();
+	UMaterialInterface* GetMaterialForShape(EShapeType Type);
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
@@ -48,6 +50,28 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* FollowCamera;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* Material_I;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* Material_O;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* Material_T;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* Material_S;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* Material_Z;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* Material_L;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* Material_J;
+
 
 private:
 
@@ -78,10 +102,10 @@ private:
 	FIntPoint CurrentPosition;
 
 	float FallTimer = 0.0f;
-	float FallInterval = 1.0f; // 1段原陥 馬悪
+	float FallInterval = 0.5f; // 1段原陥 馬悪
 
 
 	float WorldLocationX = -1500.0f;
 
-	void UpdateVisualBlocks();
+	
 };
