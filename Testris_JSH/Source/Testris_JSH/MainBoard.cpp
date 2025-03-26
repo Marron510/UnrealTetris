@@ -14,13 +14,14 @@ AMainBoard::AMainBoard()
     // Ä«¸Þ¶ó 
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpring"));
     CameraBoom->SetupAttachment(RootComponent);
+    
     CameraBoom->bUsePawnControlRotation = true;
 
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(CameraBoom);
     FollowCamera->bUsePawnControlRotation = false;
     FollowCamera->SetRelativeLocation(FVector{ WorldLocationX, Width * -0.5f * CellSize , Height * 0.7f * CellSize });
-
+    FollowCamera->SetRelativeRotation(FRotator(0.f, 180.f, 0.f ));
 
 }
 

@@ -105,7 +105,7 @@ private:
 	float FallInterval = 0.5f; // 1段原陥 馬悪
 
 
-	float WorldLocationX = -1500.0f;
+	float WorldLocationX = 1500.0f;
 
 	
 };
