@@ -23,6 +23,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UStaticMeshComponent* GetMeshComponent()
+	{
+		return MeshComponent;
+	}
 public:
 
 	UPROPERTY(EditAnywhere)

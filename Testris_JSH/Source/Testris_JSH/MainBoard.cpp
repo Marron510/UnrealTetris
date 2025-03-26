@@ -201,8 +201,11 @@ void AMainBoard::UpdateVisualBlocks()
         UMaterialInterface* ShapeMat = GetMaterialForShape(CurrentShape.GetType());
         AActor* Block = GetWorld()->SpawnActor<AActor>(BlockClass, Pos, FRotator::ZeroRotator, Params);
 
-        if (Block)
+        if (ShapeMat != nullptr && Block != nullptr)
         {
+            ATetrimo* Terimo = Cast<ATetrimo>(Block);
+            UStaticMeshComponent* Mesh = Terimo->GetMeshComponent();
+            Mesh->SetMaterial(0, ShapeMat);
             ActiveBlocks.Add(Block);
         }
     }
